@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator</title>
+    <style>body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    
+    .calculator {
+        background-color: #ccc;
+        border: 1px solid #999;
+        border-radius: 5px;
+        padding: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 300px; /* Lebar kalkulator */
+    }
+    
+    .display {
+        background-color: #fff;
+        border: 1px solid #999;
+        border-radius: 5px;
+        padding: 10px;
+        text-align: right;
+        margin-bottom: 10px;
+    }
+    
+    .display input {
+        width: 100%;
+        border: none;
+        background: none;
+        font-size: 24px;
+        color: #333;
+        text-align: right;
+    }
+    
+    .buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 10px;
+    }
+    
+    button {
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 24px;
+        cursor: pointer;
+    }
+    
+    button:hover {
+        background-color: #555;
+    }
+    
+    .operator {
+        background-color: #f39c12;
+    }
+    
+    .zero {
+        grid-column: span 2;
+    }
+
+    .equals {
+        grid-row: span 2;
+    }
+    
+    .clear, .delete, .equals {
+        background-color: #e74c3c;
+    }
+    
+    .clear:hover, .delete:hover, .equals:hover {
+        background-color: #c0392b;
+    }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display">
+            <input type="text" id="result" value="">
+        </div>
+        <div class="buttons">
+            <button class="operator" onclick="appendToDisplay('+')">+</button>
+            <button class="operator" onclick="appendToDisplay('-')">-</button>
+            <button class="operator" onclick="appendToDisplay('*')">*</button>
+            <button class="operator" onclick="appendToDisplay('/')">/</button>
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button class="delete" onclick="deleteLastDigit()">Del</button>
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button class="equals" onclick="calculateResult()">=</button>
+            <button class="zero" onclick="appendToDisplay('0')">0</button>
+            <button onclick="appendToDisplay('.')">.</button>
+        </div>
+    </div>
+    <script>let display = document.getElementById('result');
+        let currentInput = '';
+        let lastInputIsOperator = false;
+        let lastInputIsDecimal = false;
+        
+        function clearDisplay() {
+            currentInput = '';
+            display.value = '';
+            lastInputIsOperator = false;
+            lastInputIsDecimal = false;
+        }
+        
+        function deleteLastDigit() {
+            if (currentInput.length > 0) {
+                const lastChar = currentInput.slice(-1);
+                currentInput = currentInput.slice(0, -1);
+                display.value = currentInput;
+                if (isOperator(lastChar)) {
+                    lastInputIsOperator = true;
+                } else if (lastChar === '.') {
+                    lastInputIsDecimal = false;
+                }
+            }
+        }
+        
+        function appendToDisplay(value) {
+            if (value === '+' || value === '-' || value === '*' || value === '/') {
+                if (!lastInputIsOperator && currentInput !== '') {
+                    currentInput += value;
+                    display.value = currentInput;
+                    lastInputIsOperator = true;
+                    lastInputIsDecimal = false;
+                }
+            } else if (value === '.') {
+                if (!lastInputIsDecimal) {
+                    currentInput += value;
+                    display.value = currentInput;
+                    lastInputIsOperator = false;
+                    lastInputIsDecimal = true;
+                }
+            } else {
+                currentInput += value;
+                display.value = currentInput;
+                lastInputIsOperator = false;
+            }
+        }
+        
+        function calculateResult() {
+            try {
+                currentInput = eval(currentInput);
+                display.value = currentInput;
+            } catch (error) {
+                display.value = 'Error';
+            }
+        }
+        
+        function isOperator(value) {
+            return value === '+' || value === '-' || value === '*' || value === '/';
+        }
+        </script>
+</body>
+</html>

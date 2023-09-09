@@ -69,10 +69,14 @@
         grid-column: span 2;
     }
 
-    .equals {
-        grid-row: span 2;
+    .plus-minus {
+    background-color: #3498db;
     }
-    
+
+    .plus-minus:hover {
+        background-color: #2980b9;
+    }
+
     .clear, .delete, .equals {
         background-color: #e74c3c;
     }
@@ -95,20 +99,22 @@
             <button onclick="appendToDisplay('7')">7</button>
             <button onclick="appendToDisplay('8')">8</button>
             <button onclick="appendToDisplay('9')">9</button>
-            <button class="clear" onclick="clearDisplay()">C</button>
+            <button class="plus-minus" onclick="toggleSign()">±</button>
             <button onclick="appendToDisplay('4')">4</button>
             <button onclick="appendToDisplay('5')">5</button>
             <button onclick="appendToDisplay('6')">6</button>
-            <button class="delete" onclick="deleteLastDigit()">Del</button>
+            <button class="clear" onclick="clearDisplay()">C</button>
             <button onclick="appendToDisplay('1')">1</button>
             <button onclick="appendToDisplay('2')">2</button>
             <button onclick="appendToDisplay('3')">3</button>
-            <button class="equals" onclick="calculateResult()">=</button>
+            <button class="delete" onclick="deleteLastDigit()">Del</button>
             <button class="zero" onclick="appendToDisplay('0')">0</button>
             <button onclick="appendToDisplay('.')">.</button>
+            <button class="equals" onclick="calculateResult()">=</button>
         </div>
     </div>
-    <script>let display = document.getElementById('result');
+    <script>
+        let display = document.getElementById('result');
         let currentInput = '';
         let lastInputIsOperator = false;
         let lastInputIsDecimal = false;
@@ -167,6 +173,17 @@
         function isOperator(value) {
             return value === '+' || value === '-' || value === '*' || value === '/';
         }
-        </script>
+
+        function toggleSign() {
+            if (currentInput !== '' && !lastInputIsOperator) {
+                if (currentInput.startsWith('-')) {
+                    currentInput = currentInput.substring(1);
+                } else {
+                    currentInput = '-' + currentInput;
+                }
+                display.value = currentInput;
+            }
+        }
+    </script>
 </body>
 </html>
